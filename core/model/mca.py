@@ -449,7 +449,6 @@ class MHAtt(nn.Module):
                 # u_weibull = torch.rand_like(scores)
 
                 if self.HP.model_type =='whai':
-                    # score_mid 范围 0.11 附近
                     scores_mid = torch.exp(scores2) + 0.05
                     # scores_mid = torch.exp(scores2)
 
@@ -547,12 +546,6 @@ class MHAtt(nn.Module):
                 att_map = F.softmax(sample_normal, dim=-1)
                 if self.HP.att_kl != 0.0:
                     KL = torch.log(self.sigma_normal_prior / self.sigma_normal_posterior + eps) + (self.sigma_normal_posterior ** 2 + (scores - self.mean_normal_prior) ** 2) / (2 * self.sigma_normal_prior ** 2) - 0.5
-                    # KL = (self.sigma_normal_posterior ** 2 + (scores - self.mean_normal_prior) ** 2) / (2 * self.sigma_normal_prior ** 2) - 0.5
-                    # KL = torch.log(self.sigma_normal_prior / self.sigma_normal_posterior + eps) + (
-                    #             self.sigma_normal_posterior ** 2 + (scores - self.mean_normal_prior) ** 2) / (
-                    #                  2 * self.sigma_normal_prior ** 2) - 0.5
-                    # KL = KL * att_masks.view(-1, att_size).float()
-                    # self.KL_backward = -KL.sum() / att_masks.sum().float()
                     self.KL_backward = KL.mean()
             else:
                 att_map = F.softmax(scores, dim=-1)

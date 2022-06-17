@@ -42,25 +42,11 @@ class AttFlat(nn.Module):
             x_mask.squeeze(1).squeeze(1).unsqueeze(2),
             -1e9
         )
-        # Gumbel Softmax
-        # noise = torch.rand(att.size()).cuda()
-        # eps =1e-7
-        # noise = noise.add_(eps).log_().neg_()
-        # temperature =self.concrete_temp
-        # att = (att+noise) / temperature
-        # att = F.softmax(att, dim=1)
+
 
         att = F.softmax(att, dim=1)
 
-        # Hard Attention
-        # att = F.softmax(att, dim=1) # 64, 8, 14, 14 // 64, 8, 100, 100, // 64, 8, 100, 14
-        # #print('att_map shape', att_map.shape)
-        # # att_map = self.dropout(att_map)
-        # att = torch.distributions.OneHotCategorical(att)
-        # att = att.sample()
-        # print('att_map_one', att_map_one)
-        # log_probs = att_map_dis.log_prob(att_map_one)
-        # self.log_probs = log_probs
+
 
         att_list = []
         for i in range(self.__C.FLAT_GLIMPSES):
